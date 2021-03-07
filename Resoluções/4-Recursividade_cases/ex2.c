@@ -2,26 +2,23 @@
 #include<stdio.h>
 #include<math.h>
 
-double my_pow(int b, int e);
+int minDivCom(int num1, int num2, int div);
 
 int main(int argc, char *argv[]){
 
-    int b, e;
+    int num1, num2;
 
-    printf("Informe a base e o expoente para obter a potencia: \n");
+    printf("Informe 2 (dois) numeros inteiros positivos para ser calculado\no minimo divisor comum entre eles:\n");
 
-    scanf("%d %d", &b, &e);
+    scanf("%d %d", &num1, &num2);
 
-    printf("%d^%d = %.3lf\n", b, e, my_pow(b,e));
+    minDivCom(num1, num2, 2);
 
     return 0;
 }
 
 //implementação das funções
 
-double my_pow(int b, int e){
+int minDivCom(int num1, int num2, int div){
 
-    if(e>1) b *= my_pow(b, --e);
-
-    return b;
 }
