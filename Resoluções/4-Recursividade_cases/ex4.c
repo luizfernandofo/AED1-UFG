@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<math.h>
 
-#define MAX 10
+
 
 /**
  * @brief Procura, através de recursão, o maior valor do vetor.
