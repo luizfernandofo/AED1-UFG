@@ -2,58 +2,65 @@
 #include<stdio.h>
 #include<math.h>
 
-
+//conversao binaria
 
 /**
- * @brief Procura, através de recursão, o maior valor do vetor.
+ * @brief Função recursiva para converter números de base decimal inteiros positivos em base binária.
  * 
- * @param v endereço do vetor.
- * @param i Casa inicial do vetor.
- * @param j Casa inicial do vetor + 1.
+ * @param n Número que será convertido.
+ * @param i Contador para posicionar os 0s e 1s no vetor.
+ * @param bin Vetor do tipo char para armazenar os 0s e 1s.
+ * @return Retorna o indice utilizado no vetor.
  */
-void highest(int *v, int i, int j);
+int conversor(int n, int i, char *bin);
 
 int main(int argc, char *argv[]){
 
-    int v[MAX];
+    int i, max; //contadores
+    int n;
+    char bin[64]; //tamanho do vetor que recebera cada bit da divisão, pensando em um sistema 64 bits.
 
-    int i; //contadores
+    printf("CONVERSOR DECIMAL -> BINARIO\n\n");
+    printf("Digite um numero inteiro:\n");
 
-    for (i = 0; i < MAX; i++) v[i] = rand() % 100; //preenche o vetor com valores aleatórios
-    
-    printf("Vetor:\n[ ");
-    for(i = 0; i < MAX; i++) printf("%d ", v[i]);
-    printf("]\n\n");
+    scanf("%d", &n);
 
-    highest(v, 0, 1);
+    max = conversor(n, 0, bin);
 
-    printf("Maior valor do vetor: %d", v[0]);
+    printf("\nDecimal: %d\nBinario: ", n);
+
+    for(i=max; i>=0; i--)
+    {
+        printf("%d", bin[i]);
+    }
+    printf("\n");
+
     return 0;
 }
 
 //implementação das funções
 
-void highest(int *v, int i, int j){
+int conversor(int n, int i, char *bin){
+    int resto;
 
-    int temp;
-
-    if(j >= MAX)
+    if(n <= 0)
     {
-        j = i + 1 ;
-        i++; 
+        bin[0] = 0;
+        return 0;
+    } 
 
-        if(i >= MAX) return;
-
+    if(n == 1)
+    {
+        bin[i] = 1;
+        return i;
     }
+    
+    resto = n%2;
 
-    if(v[j]>v[i])
-    {
-        temp = v[i];
-        v[i] = v[j];
-        v[j] = temp;
+    bin[i] = resto;
 
-        highest(v, i, ++j);
+    if(resto == 0) n /= 2;
+    else n = (n-1)/2;
 
-    }else highest(v, i, ++j);
-
+    conversor(n, ++i, bin);
 }
