@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 
     printf("Raiz quadrada de %.3f = %f\n", n, resp);
 
-    return 0;
+    return 0; 
 }
 
 //implementação das funções
