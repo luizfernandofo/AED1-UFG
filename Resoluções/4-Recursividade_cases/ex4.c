@@ -62,5 +62,5 @@ int conversor(int n, int i, char *bin){
     if(resto == 0) n /= 2;
     else n = (n-1)/2;
 
-    conversor(n, ++i, bin);
+    return conversor(n, ++i, bin);
 }

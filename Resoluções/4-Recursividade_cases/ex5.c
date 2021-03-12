@@ -41,7 +41,7 @@ int MDC(int num1, int num2, int div, int resp){
     resto1 = num1 % div; //Recebe o valor do resto da divisão para poupar operações.
     resto2 = num2 % div;
 
-    if(resto1 != 0 && resto2 != 0) MDC(num1, num2, ++div, resp); //verifica se ambos números não sao mais multiplos de div e chama a função com um div maior.
+    if(resto1 != 0 && resto2 != 0) return MDC(num1, num2, ++div, resp); //verifica se ambos números não sao mais multiplos de div e chama a função com um div maior.
     else
     {           
         if(resto1 == resto2)
@@ -51,21 +51,21 @@ int MDC(int num1, int num2, int div, int resp){
 
             resp *= div;
 
-            MDC(num1, num2, div, resp);
+            return MDC(num1, num2, div, resp);
 
         }else if(resto1 == 0){
             num1 /= div;
 
             resp *= div;
 
-            MDC(num1, num2, div, resp);
+            return MDC(num1, num2, div, resp);
 
         }else{
             num2 /= div;
 
             resp *= div;
 
-            MDC(num1, num2, div, resp);
+            return MDC(num1, num2, div, resp);
         } 
     }
 }

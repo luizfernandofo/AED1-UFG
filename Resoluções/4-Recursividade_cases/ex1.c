@@ -73,7 +73,8 @@ int finder(char *string, int size, char c, int i){
     if(i < size)
     {
         if(string[i] == c) return i+1;
-        else finder(string, size, c, ++i);
+        else return finder(string, size, c, ++i);
+        
     }else return -1;
 
 }

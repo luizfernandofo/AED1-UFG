@@ -16,8 +16,8 @@ int main(int argc, char *argv[]){
 
     scanf("%lf", &n);
 
-    printf("Raiz quadrada de %.4lf = %.4lf\n", n, my_sqrt(n, 1)); //tive retornos: 1.#NAN
-
+    printf("Raiz quadrada de %.4lf = %.4lf\n", n, my_sqrt(n, 1)); 
+    
     return 0; 
 }
 
@@ -31,7 +31,7 @@ double my_sqrt(double n, double x){
 
     x = (x/2.0) + (n/(2.0*x));
     
-    my_sqrt(n, x);
+    return my_sqrt(n, x);
     
 }
 

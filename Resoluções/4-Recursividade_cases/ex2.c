@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 
     int num1, num2, res;
 
-    printf("Informe 2 (dois) numeros inteiros positivos para ser calculado\no minimo divisor comum entre eles:\n");
+    printf("\nInforme 2 (dois) numeros inteiros positivos para ser calculado\no minimo divisor comum entre eles:\n");
 
     scanf("%d %d", &num1, &num2);
 
@@ -35,6 +35,6 @@ int minDivCom(int num1, int num2, int div){
     if(div > num1 || div > num2) return -1;
 
     if(num1%div == 0 && num2%div == 0) return div;
-    else minDivCom(num1, num2, ++div);
+    else return minDivCom(num1, num2, ++div);
 
 }
