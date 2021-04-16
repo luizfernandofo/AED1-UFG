@@ -13,23 +13,16 @@ void heapify(char arr[], int n, int i){
     int max = i;
     int leftChild = 2 * i + 1;
     int rightChild = 2 * i + 2;
-    char rightTrocou=0, leftTrocou=0;
 
-
-    if(arr[leftChild] > 64 && arr[leftChild] < 91){
-        arr[leftChild] += 32;
-        leftTrocou = 1;
-    }
+    if(arr[max] > 64 && arr[max] < 91) arr[max] += 32;
+        
+    if(arr[leftChild] > 64 && arr[leftChild] < 91) arr[leftChild] += 32;    
+    
     if (leftChild < n && arr[leftChild] < arr[max]) max = leftChild;
 
-    if(arr[rightChild] > 64 && arr[rightChild] < 91){
-        arr[rightChild] += 32;
-        rightTrocou = 1;
-    }
+    if(arr[rightChild] > 64 && arr[rightChild] < 91) arr[rightChild] += 32;
+      
     if (rightChild < n && arr[rightChild] < arr[max]) max = rightChild;
-
-    if(leftTrocou == 1) arr[leftChild] -= 32;
-    else if(rightTrocou == 1) arr[rightChild] -= 32;
 
     if (max != i){
         swap(&arr[i], &arr[max]);
@@ -53,13 +46,13 @@ int main(void){
 
     char s[23+1] = "Ordenando com Heap Sort";
 
-    printf("\nFrase ANTES da ordenacao com Heap Sort:\n");
+    printf("\nFrase ANTES da ordenacao decrescente com Heap Sort:\n");
 
     printf("\n%s.\n", s);
 
     heapSort(s, 23);
 
-    printf("\nFrase DEPOIS da ordenacao com Heap Sort:\n");
+    printf("\nFrase DEPOIS da ordenacao decrescente com Heap Sort:\n");
 
     printf("\n%s.\n\n", s);    
 

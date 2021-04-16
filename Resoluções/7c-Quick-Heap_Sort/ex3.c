@@ -49,7 +49,7 @@ int main(void){
     int tam=0, i, j; //contadores
     
 
-    printf("Digite um nome e confirme com ENTER\nPara finalizar a leitura use o indicador de fim de leitura do seu sistema operacional (ex.: CTRL + Z) e de ENTER:\n");
+    printf("\nDigite um nome e confirme com ENTER\npara finalizar a leitura use o indicador de fim de leitura do seu sistema operacional (ex.: CTRL + Z) e de ENTER:\n");
 
     while(1){
 
