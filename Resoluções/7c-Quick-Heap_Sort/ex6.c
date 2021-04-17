@@ -14,13 +14,13 @@ void heapify(char arr[], int n, int i){
     int leftChild = 2 * i + 1;
     int rightChild = 2 * i + 2;
 
-    if(arr[max] > 64 && arr[max] < 91) arr[max] += 32;
+    //if(arr[max] > 64 && arr[max] < 91) arr[max] += 32;
         
-    if(arr[leftChild] > 64 && arr[leftChild] < 91) arr[leftChild] += 32;    
+    //if(arr[leftChild] > 64 && arr[leftChild] < 91) arr[leftChild] += 32;    
     
     if (leftChild < n && arr[leftChild] < arr[max]) max = leftChild;
 
-    if(arr[rightChild] > 64 && arr[rightChild] < 91) arr[rightChild] += 32;
+    //if(arr[rightChild] > 64 && arr[rightChild] < 91) arr[rightChild] += 32;
       
     if (rightChild < n && arr[rightChild] < arr[max]) max = rightChild;
 
