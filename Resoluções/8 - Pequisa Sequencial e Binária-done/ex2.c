@@ -58,7 +58,7 @@ void binario(int vet[], int tam, int v){
     int comp = 0;
     char achou = 0;
 
-    while (begin < end){
+    while (begin <= end){
         i = (begin + end) / 2;
 
         comp++;
@@ -69,6 +69,8 @@ void binario(int vet[], int tam, int v){
         
         if(vet[i] < v) begin = i + 1;
         else end = i;
+
+        if(begin==end && end==i) break;
         
     }
     if(achou == 1) printf("Valor %d encontrado no indice %d.\nComparacoes: %d.\n", v, i, comp);
@@ -101,6 +103,10 @@ int main(void){
     quickSort(vet, 0, tam);
     printf("Ordenando vetor...\n");
     printf("\n");
+
+    printf("<");
+    for(i=0; i<tam-1; i++) printf("%d, ", vet[i]);
+    printf("%d>\n\n", vet[tam-1]);
 
     printf("Valor a ser procurado no vetor: ");
     scanf("%d", &v);
