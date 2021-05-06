@@ -98,11 +98,12 @@ void freeList(lista *list){
 
     
     while(list->headList != NULL){
+        
         tempNode = list->headList;
+        
         list->headList = list->headList->next;
+        
         free(tempNode);
-
-        tempNode = tempNode->next;
 
         list->size--;
     }
