@@ -190,7 +190,7 @@ void remove_value(lista *list, int val){
 
         }
 
-    }else{
+    }else if(val <= list->size){
 
         while(tempNode != NULL){
             
