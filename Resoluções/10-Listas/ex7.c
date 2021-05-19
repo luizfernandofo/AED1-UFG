@@ -12,6 +12,7 @@
 typedef struct Node{
 
     struct Node *next;
+    struct Node *prev;
     int value;
 
 }node;
@@ -56,7 +57,7 @@ int main(void){
     while(op != 5){
 
         system(CLS);
-        printf("----------- LISTA DINAMICA ENCADEADA CIRCULAR -----------\n\n");
+        printf("----------- LISTA DINAMICA DUPLAMENTE ENCADEADA CIRCULAR -----------\n\n");
         printf("Lista:\n\n");
         printList(&list);
         printf("\n\n");
@@ -145,6 +146,7 @@ void addNode(lista *list, int value){
 
         if(tempNode != NULL){
             tempNode->next = tempNode;
+            tempNode->prev = tempNode;
             tempNode->value = value;
 
             list->headList = list->tailList = tempNode;
@@ -162,6 +164,8 @@ void addNode(lista *list, int value){
 
         if(tempNode != NULL){
             
+            tempNode->prev = list->tailList;
+
             list->tailList->next = tempNode;
 
             list->tailList = tempNode;
@@ -227,7 +231,7 @@ void freeList(lista *list){
 
 void remove_position(lista *list, int val){
 
-    node *tempNode=NULL, *nodeAnterior=NULL;
+    node *tempNode=NULL;
 
     char removed = 0;
 
@@ -238,9 +242,12 @@ void remove_position(lista *list, int val){
         if(val == 1){
 
             if(list->headList->next != list->headList){ //verifica se o próximo elemento é a cabeça da lista
+
                 list->headList = list->headList->next;
 
                 list->tailList->next = list->headList;
+
+                list->headList->prev = list->tailList;
 
                 list->size--;
 
@@ -269,7 +276,6 @@ void remove_position(lista *list, int val){
 
             while(tempNode->next != list->headList){
                 
-                nodeAnterior = tempNode;
                 tempNode = tempNode->next;
 
                 val--;
@@ -277,10 +283,18 @@ void remove_position(lista *list, int val){
                 if(val == 1){
 
                     if(tempNode->next == list->headList){ //verifica se o elemento possui outro na frente ou se é o último
-                        nodeAnterior->next = list->headList;
-                        list->tailList = nodeAnterior;
 
-                    }else nodeAnterior->next = tempNode->next;
+                        tempNode->prev->next = list->headList; //seta o endereço do elemento anterior a temp node para o proximo
+
+                        list->headList->prev = tempNode->prev;
+
+                        list->tailList = tempNode->prev;
+
+                    }else{
+                        tempNode->prev->next = tempNode->next;
+
+                        tempNode->next->prev = tempNode->prev;
+                    }
 
                     list->size--;
 
@@ -307,7 +321,7 @@ void remove_position(lista *list, int val){
 
 void remove_value(lista *list, int val){
 
-    node *tempNode=NULL, *nodeAnterior=NULL; //nodeAnterior servirá para armazenar o endereço do nó anterior ao que estiver sendo avaliado para o caso dele ser removido.
+    node *tempNode=NULL; //nodeAnterior servirá para armazenar o endereço do nó anterior ao que estiver sendo avaliado para o caso dele ser removido.
     
     char removed = 0;
 
@@ -321,21 +335,23 @@ void remove_value(lista *list, int val){
 
                 if(list->headList->next != list->headList){ //verifica se o próximo elemento é a cabeça da lista
 
-                list->headList = list->headList->next;
+                    list->headList = list->headList->next;
 
-                list->tailList->next = list->headList;
+                    list->tailList->next = list->headList;
 
-                list->size--;
+                    list->headList->prev = list->tailList;
 
-                val = tempNode->value;
+                    list->size--;
 
-                free(tempNode); //libera o elemento
+                    val = tempNode->value;
 
-                removed = 1;
+                    free(tempNode); //libera o elemento
 
-                tempNode = list->headList; //re-seta a temporária para continuar procurando na lista por mais elementos repetidos
+                    removed = 1;
 
-                continue;
+                    tempNode = list->headList; //re-seta a temporária para continuar procurando na lista por mais elementos repetidos
+
+                    continue;
                 
                 }else{ //caso não haja ele irá remover a cabeça que também era a cauda e setar a lista.
 
@@ -355,10 +371,18 @@ void remove_value(lista *list, int val){
             }else{ //caso o elemento não seja a cabeça
                 
                 if(tempNode->next == list->headList){ //verifica se o elemento possui outro na frente ou se é o último
-                    nodeAnterior->next = list->headList;
-                    list->tailList = nodeAnterior;
 
-                }else nodeAnterior->next = tempNode->next; 
+                    tempNode->prev->next = list->headList; //seta o endereço do elemento anterior a temp node para o proximo
+
+                    list->headList->prev = tempNode->prev;
+
+                    list->tailList = tempNode->prev;
+
+                }else{
+                    tempNode->prev->next = tempNode->next;
+
+                    tempNode->next->prev = tempNode->prev;
+                } 
 
                 removed = 1;
             
@@ -366,14 +390,15 @@ void remove_value(lista *list, int val){
 
                 free(tempNode); //libera o elemento
 
-                tempNode = nodeAnterior; //re-seta a temporária para continuar procurando na lista por mais elementos repetidos
+                tempNode = list->headList; //re-seta a temporária para continuar procurando na lista por mais elementos repetidos
+
+                continue;
 
             }
         }
 
         if(tempNode->next == list->headList) break;
 
-        nodeAnterior = tempNode;
         tempNode = tempNode->next;
 
     }while(1);
@@ -395,7 +420,7 @@ void pause(){
 
 void addNodePosition(lista *list, int pos){
 
-    node *tempNode=NULL, *tempNodeWhile=NULL, *anterior=NULL;
+    node *tempNode=NULL, *tempNodeWhile=NULL;
 
     int i; //contadores
 
@@ -414,7 +439,9 @@ void addNodePosition(lista *list, int pos){
         tempNode = (node *) malloc(sizeof(node));
 
         if(tempNode != NULL){
+
             tempNode->next = tempNode;
+            tempNode->prev = tempNode;
             tempNode->value = value;
 
             list->headList = list->tailList = tempNode;
@@ -441,7 +468,11 @@ void addNodePosition(lista *list, int pos){
 
             list->tailList->next = tempNode;
 
+            tempNode->prev = list->tailList;
+
             tempNode->next = list->headList;
+
+            list->headList->prev = tempNode;
 
             list->tailList = tempNode;
 
@@ -471,14 +502,22 @@ void addNodePosition(lista *list, int pos){
                     
                     tempNode->value = value;
 
-                    if(tempNodeWhile == list->headList){
+                    if(tempNodeWhile == list->headList){ //se a posição for o 1 elemento da lista
 
-                        list->headList = tempNode;
-                        tempNode->next = tempNodeWhile;  
+                        list->headList = tempNode; //cabeça da lista é re-setada
+
+                        tempNode->next = tempNodeWhile; //novo valor tem seu "next" setado para o antigo nó da cabeça
+
+                        tempNodeWhile->prev = tempNode; //a antiga cabeça tem seu "prev" setado para o novo valor
+
+                        tempNode->prev = list->tailList; // como é uma lista circular o tempNode->prev recebe o endereço da cauda
+
+                        list->tailList->next = tempNode; // e a cauda recebe seu endereço
 
                     }else{
 
-                        anterior->next = tempNode;
+                        tempNodeWhile->prev->next = tempNode;
+
                         tempNode->next = tempNodeWhile;
 
                     }
@@ -495,7 +534,6 @@ void addNodePosition(lista *list, int pos){
 
             i--;
             
-            anterior = tempNodeWhile;
             tempNodeWhile = tempNodeWhile->next;
 
         }while(i!=0);
@@ -504,3 +542,5 @@ void addNodePosition(lista *list, int pos){
 
     return;
 }
+
+/*está bugando quando deleto por posição. Ainda não achei o bug*/
