@@ -173,6 +173,8 @@ void remove_value(lista *list, int val){
 
             list->size--;
 
+            val = tempNode->value;
+
             free(tempNode); //libera o elemento
 
             removed = 1;
@@ -183,6 +185,8 @@ void remove_value(lista *list, int val){
             list->headList = NULL;
             list->tailList = NULL;
             list->size=0;
+
+            val = tempNode->value;
 
             free(tempNode); //libera o elemento
 

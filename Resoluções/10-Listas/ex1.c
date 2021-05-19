@@ -128,7 +128,7 @@ int main(void){
         
         case 2:
             system(CLS);
-            printf("Posicao do elemento: ");
+            printf("Posicao do elemento (0...9): ");
             scanf("%d", &pos);
             system(CLS);
             if(pos < ELEMENTOS && pos >= 0){
@@ -152,7 +152,7 @@ int main(void){
 
         case 3:
             system(CLS);
-            printf("Posicao do elemento: ");
+            printf("Posicao do elemento (0...9): ");
             scanf("%d", &pos);
             system(CLS);
             if(pos < ELEMENTOS && pos >= 0){
