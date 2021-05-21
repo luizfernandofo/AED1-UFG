@@ -60,7 +60,7 @@ int main(void){
         printf("----------- LISTA DINAMICA DUPLAMENTE ENCADEADA CIRCULAR -----------\n\n");
         printf("Lista:\n\n");
         printList(&list);
-        printf("\n\n");
+        printf("End. cabeca: %p\nEnd. cauda: %p\n\n",list.headList, list.tailList);
         printf("------------------------------------------------\n");
         printf("1 - Adicionar nodo.\n");
         printf("2 - Adicionar nodo por posicao.\n");
@@ -151,12 +151,12 @@ void addNode(lista *list, int value){
 
             list->headList = list->tailList = tempNode;
 
+            list->size++;
+
         }else{
             printf("Falha na alocacao de um nodo.\n");
             exit(1);
         }
-
-        list->size++;
         
     }else{
 
@@ -172,14 +172,16 @@ void addNode(lista *list, int value){
 
             tempNode->next = list->headList;
 
+            list->headList->prev = tempNode;
+
             tempNode->value = value;
+
+            list->size++;
 
         }else{
             printf("Falha na alocacao de um nodo.\n");
             exit(1);
         } 
-
-        list->size++;
 
     }
 
@@ -241,7 +243,7 @@ void remove_position(lista *list, int val){
 
         if(val == 1){
 
-            if(list->headList->next != list->headList){ //verifica se o próximo elemento é a cabeça da lista
+            if(list->headList->next != list->headList){ //verifica se o próximo elemento é a cabeça da lista, caso não for:
 
                 list->headList = list->headList->next;
 
@@ -272,7 +274,7 @@ void remove_position(lista *list, int val){
 
             }
 
-        }else if(val <= list->size){
+        }else if(val <= list->size && val > 1){
 
             while(tempNode->next != list->headList){
                 
@@ -454,7 +456,32 @@ void addNodePosition(lista *list, int pos){
         list->size++;
 
 
-    }else if(pos == list->size+1){ //verifica a posição desejada é a última. Neste caso o nodo será adicionado como último elemento
+    }else if(pos == list->size){ //verifica a posição desejada é a última. Neste caso o nodo movera o último nodo para frente
+
+        printf("Qual o valor que deseja adicionar na posicao %d: ", pos);
+
+        scanf("%d", &value);
+
+        tempNode = (node *) malloc(sizeof(node));
+
+        if(tempNode != NULL){
+            
+            tempNode->value = value;
+
+            list->tailList->prev->next = tempNode;
+            tempNode->prev = list->tailList->prev;
+            tempNode->next = list->tailList;
+            list->tailList->prev = tempNode;
+
+        }else{
+            printf("Falha na alocacao de um nodo.\n");
+            exit(1);
+        }
+
+        list->size++;
+
+
+    }else if(pos == list->size+1){ //verifica a posição desejada é a seguinte da última. Neste caso o nodo será adicionado como último elemento
 
         printf("Qual o valor que deseja adicionar na posicao %d: ", pos);
 

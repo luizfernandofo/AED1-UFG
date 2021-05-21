@@ -37,6 +37,8 @@ void remove_position(lista *list, int val);
 
 void remove_value(lista *list, int val);
 
+void addNodePosition(lista *list, int pos);
+
 void pause();
 
 //=======================================================================
@@ -51,59 +53,68 @@ int main(void){
 
     list = makeList();
 
-    while(op != 4){
+    while(op != 5){
 
         system(CLS);
         printf("----------- LISTA ENCADEADA DINAMICA -----------\n\n");
         printf("Lista:\n\n");
         printList(&list);
-        printf("\n\n");
+        printf("End. cabeca: %p\nEnd. cauda: %p\n\n",list.headList, list.tailList);
         printf("------------------------------------------------\n");
         printf("1 - Adicionar nodo.\n");
-        printf("2 - Excluir nodo por valor.\n");
-        printf("3 - Excluir nodo por posicao.\n");
-        printf("4 - Sair.\n");
+        printf("2 - Adicionar nodo por posicao.\n");
+        printf("3 - Excluir nodo por valor.\n");
+        printf("4 - Excluir nodo por posicao.\n");
+        printf("5 - Sair.\n");
 
         scanf("%d", &op);
 
         switch(op){
-        case 1:
-            system(CLS);
-            printf("Valor do nodo a ser adicionado: ");
-            scanf("%d", &val);
-            addNode(&list, val);
-            pause();
-            break;
-        
-        case 2:
-            system(CLS);
-            printf("Valor do nodo a ser excluido: ");
-            scanf("%d", &val);
-            remove_value(&list, val);
-            pause();
-            break;
+            case 1:
+                system(CLS);
+                printf("Valor do nodo a ser adicionado: ");
+                scanf("%d", &val);
+                addNode(&list, val);
+                pause();
+                break;
 
-        case 3:
-            system(CLS);
-            printf("Posicao do nodo a ser excluido: ");
-            scanf("%d", &val);
-            remove_position(&list, val);
-            pause();
-            break;
-        
-        case 4:
-            system(CLS);
-            printf("Limpando lista...\n");
-            op = 4;
-            freeList(&list); 
-            pause();
-            break;
+            case 2:
+                system(CLS);
+                printf("Posicao do nodo a ser adicionado: ");
+                scanf("%d", &val);
+                addNodePosition(&list, val);
+                pause();
+                break;
 
-        default: 
-            system(CLS);
-            printf("Opcao invalida!\n");
-            pause();
-            break;
+            case 3:
+                system(CLS);
+                printf("Valor do nodo a ser excluido: ");
+                scanf("%d", &val);
+                remove_value(&list, val);
+                pause();
+                break;
+
+            case 4:
+                system(CLS);
+                printf("Posicao do nodo a ser excluido: ");
+                scanf("%d", &val);
+                remove_position(&list, val);
+                pause();
+                break;
+            
+            case 5:
+                system(CLS);
+                printf("Limpando lista...\n");
+                op = 5;
+                freeList(&list); 
+                pause();
+                break;
+
+            default: 
+                system(CLS);
+                printf("Opcao invalida!\n");
+                pause();
+                break;
         }
     }
 
@@ -360,6 +371,120 @@ void pause(){
     setbuf(stdin, NULL);
     printf("\nPressione ENTER para continuar..."); //não pode ter "lixo" no stdin para ela funcionar
     getchar();
+
+    return;
+}
+
+void addNodePosition(lista *list, int pos){
+
+    node *tempNode=NULL, *tempNodeWhile=NULL, *anterior=NULL;
+
+    int i; //contadores
+
+    int value;
+
+    i=pos;
+
+    system(CLS);
+
+    if(list->size == 0 && pos == 1){ //verifica se a lista está vazia e a posição desejada é a primeira. Neste caso o nodo será adicionado como primeiro elemento
+
+        printf("Qual o valor que deseja adicionar na posicao %d: ", pos);
+
+        scanf("%d", &value);
+
+        tempNode = (node *) malloc(sizeof(node));
+
+        if(tempNode != NULL){
+
+            tempNode->next = NULL;
+
+            tempNode->value = value;
+
+            list->headList = list->tailList = tempNode;
+
+        }else{
+            printf("Falha na alocacao de um nodo.\n");
+            exit(1);
+        }
+
+        list->size++;
+
+
+    }else if(pos == list->size+1){ //verifica a posição desejada é a última. Neste caso o nodo será adicionado como último elemento
+
+        printf("Qual o valor que deseja adicionar na posicao %d: ", pos);
+
+        scanf("%d", &value);
+
+        tempNode = (node *) malloc(sizeof(node));
+
+        if(tempNode != NULL){
+
+            tempNode->value = value;
+
+            list->tailList->next = tempNode;
+
+            tempNode->next = NULL;
+
+            list->tailList = tempNode;
+
+        }else{
+            printf("Falha na alocacao de um nodo.\n");
+            exit(1);
+        }
+
+        list->size++;
+
+    }else if(pos <= list->size && pos > 0){ //caso nenhuma condição acima for verdadeira será feito a busca até a posição do elemento e será incluído um no seu lugar, movendo o 
+    // elemento em questão para frente. Ex: se a posição selecionada for 4, e existir um elemento nesta posição, um novo elemento será colocado no lugar do elemento anterior que será movido para frente.
+
+        printf("Qual o valor que deseja adicionar na posicao %d: ", pos);
+
+        scanf("%d", &value);
+
+        tempNodeWhile = list->headList;
+
+        do{
+
+            if(i==1){
+
+                tempNode = (node *) malloc(sizeof(node));
+                
+                if(tempNode != NULL){
+                    
+                    tempNode->value = value;
+
+                    if(tempNodeWhile == list->headList){
+
+                        list->headList = tempNode;
+                        tempNode->next = tempNodeWhile;  
+
+                    }else{
+
+                        anterior->next = tempNode;
+                        tempNode->next = tempNodeWhile;
+
+                    }
+
+                    list->size++;
+
+                    break;
+
+                }else{
+                    printf("Falha na alocacao de um nodo.\n");
+                    exit(1);
+                }
+            }
+
+            i--;
+            
+            anterior = tempNodeWhile;
+            tempNodeWhile = tempNodeWhile->next;
+
+        }while(i!=0);
+
+    }else printf("Posicao informada invalida!\n\n");
 
     return;
 }

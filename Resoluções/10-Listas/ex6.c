@@ -59,7 +59,7 @@ int main(void){
         printf("----------- LISTA DINAMICA ENCADEADA CIRCULAR -----------\n\n");
         printf("Lista:\n\n");
         printList(&list);
-        printf("\n\n");
+        printf("End. cabeca: %p\nEnd. cauda: %p\n\n",list.headList, list.tailList);
         printf("------------------------------------------------\n");
         printf("1 - Adicionar nodo.\n");
         printf("2 - Adicionar nodo por posicao.\n");
