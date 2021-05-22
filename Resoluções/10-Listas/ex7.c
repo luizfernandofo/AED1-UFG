@@ -456,7 +456,7 @@ void addNodePosition(lista *list, int pos){
         list->size++;
 
 
-    }else if(pos == list->size){ //verifica a posição desejada é a última. Neste caso o nodo movera o último nodo para frente
+    }else if(pos == list->size && list->size > 1){ //verifica se a posição desejada é a última. Neste caso o nodo movera o último nodo para frente
 
         printf("Qual o valor que deseja adicionar na posicao %d: ", pos);
 
@@ -569,5 +569,3 @@ void addNodePosition(lista *list, int pos){
 
     return;
 }
-
-/*está bugando quando deleto por posição. Ainda não achei o bug*/
