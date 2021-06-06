@@ -50,7 +50,7 @@ int main(void){
 
     int op=-1;
     
-    int tempo;
+    int ra;
 
     Fila list;
 
@@ -63,6 +63,7 @@ int main(void){
         printQueue(&list);
         printf("------------------------------------------------------\n");
         printf("1 - Adicionar R.A. na fila.\n");
+        printf("2 - Chamar proximo da fila.\n");
         printf("0 - Sair.\n");
 
         scanf("%d", &op);
@@ -71,12 +72,18 @@ int main(void){
             case 1:
                 
                 printf("Registro academico para protocolar requerimento: ");
-                while(scanf("%d", &tempo) < 1){
+                while(scanf("%d", &ra) < 1){ // evita erros na leitura de um outro valor senão um int.
                     setbuf(stdin, NULL);
                     printf("Registro academico para protocolar requerimento: ");
                 }
 
-                enqueue(&list, tempo);
+                enqueue(&list, ra); // insere o valor na fila com o devido tratamento para o descritor do final da fila
+
+                break;
+
+            case 2:
+
+                dequeue(&list); // elimina o primeiro elemento (FI-FO)
 
                 break;
 
@@ -102,13 +109,9 @@ int main(void){
 
 void makeList(Fila *l){
 
-    l->headList = (node *) malloc(sizeof(node));
+    l->headList = NULL;
 
-    if(l->headList == NULL) exit(1);
-    
-    //adicionar os valores 
-
-    l->size = 1;
+    l->size = 0;
 
     return;
 }
@@ -117,17 +120,18 @@ void enqueue(Fila *list, int value){
 
     node *tempNode=NULL;
 
-    if(list->size == 0){
+    if(list->size == 0){ // condição para a fila vazia
 
         tempNode = (node *) malloc(sizeof(node));
 
         if(tempNode != NULL){
             
-            tempNode->next = NULL;
+            list->headList = tempNode; // "seta" a cabeça da fila para o primeiro elemento alocado
 
-            tempNode->value = value;
+            tempNode->next = tempNode; // o "next" do elemento alocado recebe ele mesmo
 
-            list->headList = list->tailList = tempNode;
+            tempNode->value = value; // recebe o valor informado na chamada da função
+
 
         }else{
             printf("Falha na alocacao de um nodo.\n");
@@ -136,19 +140,21 @@ void enqueue(Fila *list, int value){
 
         list->size++;
         
-    }else{
+    }else{ // caso a fila já possua um elemento ou mais
 
         tempNode = (node *) malloc(sizeof(node));
 
         if(tempNode != NULL){
 
-            tempNode->next = NULL;
+            tempNode->next = list->headList->next; // o elemento alocado tem seu "next" como o segundo elemento
+            // já que o primeiro é o descritor do final da fila
+
+            list->headList->next = tempNode; // o "next" do elemento "final" da fila recebe o elemento alocado, isso faz da fila uma lista circular
+
+            list->headList = tempNode; // e a cabeça da fila passa a ser o novo último elemento
 
             tempNode->value = value;
             
-            list->tailList->next = tempNode;
-
-            list->tailList = tempNode;
 
         }else{
             printf("Falha na alocacao de um nodo.\n");
@@ -169,7 +175,6 @@ void dequeue(Fila *list){
     if(list->size == 0){
 
         list->headList = NULL;
-        list->tailList = NULL;
 
         list->size = 0;
 
@@ -178,15 +183,15 @@ void dequeue(Fila *list){
         free(list->headList);
 
         list->headList = NULL;
-        list->tailList = NULL;
 
         list->size = 0;
 
-    }else if(list->size > 1){
+    }else if(list->size > 1){ // se a fila possuir mais de um elemento a desalocação sempre pula o primeiro
+    // elemento que é o que armazena o final da fila
 
-        tempNode = list->headList;
+        tempNode = list->headList->next;
 
-        list->headList = list->headList->next;
+        list->headList->next = list->headList->next->next;
 
         free(tempNode);
 
@@ -215,14 +220,26 @@ void _pause(){
 
 void printQueue(Fila *fila){
 
+    int size = fila->size;
+
+    unsigned char printed = 0;
+
     node *tempNode=NULL;
 
     tempNode = fila->headList;
-    while(tempNode != NULL){
+    while(size != 0){
 
-        printf("RA: %d\n", tempNode->value);
+        printf("RA: %d", tempNode->value);
         
+        if(printed == 0){ // booleano usado para indicar que o primeiro elemento que aparece na fila é o último
+            printf("\t(descritor da posicao final)\n");
+            printed = 1;
+        }
+        else printf("\n");
+
         tempNode = tempNode->next;
+
+        size--;
     }
     
     return;
